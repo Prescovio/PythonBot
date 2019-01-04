@@ -9,7 +9,7 @@ from discord.ext.commands import Bot
 class MyClient(Bot):
     # general events
     def __init__(self, prefix, description, formatter, pm_help):
-        super(MyClient, self).__init__(prefix, formatter, description, pm_help)
+        super().__init__(prefix, formatter, description, pm_help)
         self.add_command(self.test)
 
     @commands.command()
