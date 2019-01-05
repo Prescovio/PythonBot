@@ -1,0 +1,8 @@
+{
+  "DEFAULT": {
+    "PREFIX" : ".",
+    "DESCRIPTION" : "Discord Bot",
+    "PM_HELP" : true,
+    "LOG_PATH" : "log"
+  }
+}

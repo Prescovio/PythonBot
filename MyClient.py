@@ -1,6 +1,7 @@
 import sys
 import traceback
 import discord
+from Logger import Logger
 
 from discord.ext import commands
 from discord.ext.commands import Bot
@@ -8,16 +9,20 @@ from discord.ext.commands import Bot
 
 class MyClient(Bot):
     # general events
-    def __init__(self, prefix, description, formatter, pm_help):
+    def __init__(self, prefix, description, formatter, pm_help, log_path):
         super().__init__(prefix, formatter, description, pm_help)
         self.add_command(self.test)
+        self.logger = Logger(__name__, log_path)
 
     @commands.command()
     async def test(self, ctx, *args):
+        print(ctx)
         await ctx.send('{} arguments: {}'.format(len(args), ', '.join(args)))
 
     async def on_connect(self):
-        print("on_connect")
+        event_name = 'on_connect'
+        message = event_name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_ready(self):
         print("on_ready")
@@ -59,11 +64,19 @@ class MyClient(Bot):
         print('Latency')
         print(self.latency)
 
+        event_name = 'on_ready'
+        message = event_name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
+
     async def on_resumed(self):
-        print('on_resumed')
+        event_name = 'on_resumed'
+        message = event_name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_shard_ready(self, shard_id):
-        print("on_shard_ready")
+        event_name = 'on_shard_ready'
+        message = 'Shard id: ' + shard_id
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_error(self, event, *args, **kwargs):
         print("on_error")
@@ -77,147 +90,247 @@ class MyClient(Bot):
         print('Ignoring exception in {}'.format(event), file=sys.stderr)
         traceback.print_exc()
 
+        event_name = 'on_error'
+        message = 'Error: ' + str(traceback.print_exc())
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
+
     # guild events
     async def on_guild_join(self, guild):
-        print("on_guild_join")
+        event_name = 'on_guild_join'
+        message = 'Guild: ' + guild.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_remove(self, guild):
-        print("on_guild_remove")
+        event_name = 'on_guild_remove'
+        message = 'Guild: ' + guild.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_update(self, before, after):
-        print("on_guild_update")
+        event_name = 'on_guild_update'
+        message = 'Before: ' + before.name + ', After: ' + after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_available(self, guild):
-        print("on_guild_available")
+        event_name = 'on_guild_available'
+        message = 'Guild: ' + guild.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_unavailable(self, guild):
-        print("on_guild_unavailable")
+        event_name = 'on_guild_unavailable'
+        message = 'Guild: ' + guild.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_emojis_update(self, guild, before, after):
-        print("on_guild_emojis_update")
+        event_name = 'on_guild_emojis_update'
+        message = 'Guild: ' + guild.name + ', Before: ' + before.name + ', After: ' +  after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # role events
     async def on_guild_role_create(self, role):
-        print("on_guild_role_create")
+        event_name = 'on_guild_role_create'
+        message = 'Role: ' + role.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_role_delete(self, role):
-        print("on_guild_role_delete")
+        event_name = 'on_guild_role_delete'
+        message = 'Role: ' + role.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_role_update(self, before, after):
-        print("on_guild_role_update")
+        event_name = 'on_guild_role_update'
+        message = 'Before: ' + before.name + ' After: ' + after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # message events
     async def on_message(self, message):
         await super().process_commands(message)
-        print("on_message")
+        event_name = 'on_message'
+        message = 'Message: ' + message.content + ', Author: ' + message.author.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_message_edit(self, before, after):
-        print("on_message_edit")
+        event_name = 'on_message_edit'
+        message = ('Before message: ' + before.content + ', After message: ' + after.content +
+                   ', Author: ' + before.author)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_message_delete(self, message):
-        print("on_message_delete")
+        event_name = 'on_message'
+        message = 'Message: ' + message.content + ', Author: ' + message.author
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # raw message events
     async def on_raw_message_edit(self, payload):
-        print("on_raw_message_edit")
+        event_name = 'on_raw_message_edit'
+        message = 'Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_raw_message_delete(self, payload):
-        print("on_raw_message_delete")
+        event_name = 'on_raw_message_delete'
+        message = 'Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_raw_bulk_message_delete(self, payload):
-        print("on_raw_bulk_message_delete")
+        event_name = 'on_raw_bulk_message_delete'
+        message = 'Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # reaction events
     async def on_reaction_add(self, reaction, user):
-        print("on_reaction_add")
+        event_name = 'on_reaction_add'
+        message = 'Reaction: ' + reaction + ', User: ' + user
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_reaction_remove(self, reaction, user):
-        print("on_reaction_remove")
+        event_name = 'on_reaction_remove'
+        message = 'Reaction: ' + reaction + ', User: ' + user
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_reaction_clear(self, message, reactions):
-        print("on_reaction_clear")
+        event_name = 'on_reactions_clear'
+        message = ('Message: ' + message.content + ', Author: ' + message.author + ' - ' +
+                   ','.join(reactions))
+
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # raw reaction events
     async def on_raw_reaction_add(self, payload):
-        print("on_raw_reaction_add")
+        event_name = 'on_raw_reaction_add'
+        message = 'Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
-    async def on_raw_reaction_remove(self, padload):
-        print("on_raw_reaction_remove")
+    async def on_raw_reaction_remove(self, payload):
+        event_name = 'on_raw_reaction_remove'
+        message = 'Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_raw_reaction_clear(self, message, reactions):
-        print("on_raw_reaction_clear")
+        event_name = 'on_raw_reaction_clear'
+        message = ('Message: ' + message.content + ', Author: ' + message.author + ' - ' +
+                   ','.join(reactions))
+
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # guild channel events
     async def on_guild_channel_create(self, channel):
-        print("on_guild_channel_create")
+        event_name = 'on_private_channel_create'
+        message = 'Channel: ' + channel.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_channel_delete(self, channel):
-        print("on_guild_channel_delete")
+        event_name = 'on_private_channel_delete'
+        message = 'Channel: ' + channel.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_channel_update(self, before, after):
-        print("on_guild_channel_update")
+        event_name = 'on_guild_channel_update'
+        message = 'Before channel: ' + before.name + ', After channel: ' + after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_guild_channel_pins_update(self, channel, last_pin):
-        print("on_guild_channel_pins_update")
+        event_name = 'on_guild_channel_pins_update'
+        message = 'Channel: ' + channel.name + ', Last pin: ' + last_pin
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # private channel events
     async def on_private_channel_create(self, channel):
-        print("on_private_channel_create")
+        event_name = 'on_private_channel_create'
+        message = 'Channel: ' + channel.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_private_channel_delete(self, channel):
-        print("on_private_channel_celete")
+        event_name = 'on_private_channel_delete'
+        message = 'Channel: ' + channel.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_private_channel_update(self, before, after):
-        print("on_private_channel_update")
+        event_name = 'on_private_channel_update'
+        message = 'Before channel: ' + before.name + ', After channel: ' + after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_private_channel_pins_update(self, channel, last_pin):
-        print("on_private_channel_pins_update")
+        event_name = 'on_private_channel_pins_update'
+        message = 'Channel: ' + channel.name + ', Last pin: ' + last_pin
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # member events
     async def on_member_join(self, member):
-        print("on_member_join")
+        event_name = 'on_member_join'
+        message = 'Member: ' + member.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_member_remove(self, member):
-        print("on_member_remove")
+        event_name = 'on_member_remove'
+        message = 'Member: ' + member.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_member_update(self, before, after):
-        print("on_member_update")
+        event_name = 'on_member_update'
+        message = 'Member before: ' + before.name + ', Member after: ' + after.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_voice_state_update(self, member, before, after):
-        print("on_voice_state_updated")
+        event_name = 'on_voice_state_update'
+        message = 'Member: ' + member + ', Before: ' + before + ', After: ' + after
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_member_ban(self, guild, user):
-        print("on_member_join")
+        event_name = 'on_member_ban'
+        message = 'Guild: ' + guild.name + ', User: ' + user.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_member_unban(self, guild, user):
-        print("on_member_unban")
+        event_name = 'on_member_unban'
+        message = 'Guild: ' + guild.name + ', User: ' + user.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_typing(self, channel, user, when):
-        print("on_typing")
+        event_name = 'on_typing'
+        message = 'Channel: ' + channel.name + ', User: ' + user.name + ', at: ' + str(when)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_group_join(self, channel, user):
-        print("on_group_join")
+        event_name = 'on_group_join'
+        message = 'Channel: ' + channel.name + ', User: ' + user.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_group_remove(self, channel, user):
-        print("on_group_remove")
+        event_name = 'on_group_remove'
+        message = 'Channel: ' + channel.name + ', User: ' + user.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # relationship events
     async def on_relationship_add(self, relationship):
-        print("on_relationship_add")
+        event_name = 'on_relationship_add'
+        message = ('Relationship type: ' + relationship.type +
+                   ', Relationship user: ' + relationship.user)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_relationship_remove(self, relationship):
-        print("on_relationship_remove")
+        event_name = 'on_relationship_remove'
+        message = ('Relationship type: ' + relationship.type +
+                   ', Relationship user: ' + relationship.user)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_relationship_update(self, before, after):
-        print("on_relationship_update")
+        event_name = 'on_relationship_update'
+        message = ('Before type: ' + before.type + ', Before user: ' + before.user +
+                   ', After type: ' + after.type + ', After user: ' + after.user)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # socket events
-    async def on_socket_raw_receive(self, message):
-        print("on_socket_raw_receive")
+    async def on_socket_raw_receive(self, payload):
+        event_name = 'on_socket_raw_receive'
+        message = event_name + ' fired - Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_socket_raw_send(self, payload):
-        print("on_socket_raw_send")
+        event_name = 'on_socket_raw_send'
+        message = event_name + ' fired - Payload: ' + str(payload)
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # webhook events
     async def on_webhooks_update(self, channel):
-        print("on_webhooks_update")
+        event_name = 'on_webhooks_update'
+        message = event_name + ' fired - Channel: ' + channel.name
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
