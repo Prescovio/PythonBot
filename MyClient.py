@@ -122,7 +122,7 @@ class MyClient(Bot):
 
     async def on_guild_emojis_update(self, guild, before, after):
         event_name = 'on_guild_emojis_update'
-        message = 'Guild: ' + guild.name + ', Before: ' + before.name + ', After: ' +  after.name
+        message = 'Guild: ' + guild.name + ', Before: ' + before.name + ', After: ' + after.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # role events
@@ -266,7 +266,7 @@ class MyClient(Bot):
 
     async def on_member_update(self, before, after):
         event_name = 'on_member_update'
-        message = 'Member before: ' + before.name + ', Member after: ' + after.name
+        message = before.name + ' Member before: ' + str(before.status) + ', Member after: ' + str(after.status)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_voice_state_update(self, member, before, after):
