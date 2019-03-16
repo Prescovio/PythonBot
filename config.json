@@ -1,5 +1,5 @@
 {
-  "DEFAULT": {
+  "GENERAL": {
     "PREFIX" : ".",
     "DESCRIPTION" : "Discord Bot",
     "PM_HELP" : true,

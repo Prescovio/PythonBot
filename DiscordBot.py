@@ -6,10 +6,10 @@ from MyHelpFormatter import MyHelpFormatter
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-prefix = config['DEFAULT']['PREFIX']
-description = config['DEFAULT']['DESCRIPTION']
-pm_help = config['DEFAULT']['PM_HELP']
-log_path = config['DEFAULT']['LOG_PATH']
+prefix = config['GENERAL']['PREFIX']
+description = config['GENERAL']['DESCRIPTION']
+pm_help = config['GENERAL']['PM_HELP']
+log_path = config['GENERAL']['LOG_PATH']
 
 help_formatter = MyHelpFormatter()
 bot = MyClient(prefix, description, help_formatter, pm_help, log_path)

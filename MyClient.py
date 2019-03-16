@@ -25,44 +25,11 @@ class MyClient(Bot):
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_ready(self):
-        print("on_ready")
         print("Discord version ", discord.version_info)
         print('Logged in as')
         print(self.user.name)
         print(self.user.id)
         print('------------------')
-        print('All channels')
-        for channel in self.get_all_channels():
-            print(channel)
-
-        print('All private channels')
-        for private_channel in self.private_channels:
-            print(private_channel)
-
-        print('All Members')
-        for member in self.get_all_members():
-            print(member)
-
-        print('All Users')
-        for user in self.users:
-            print(user)
-
-        print('All Guilds')
-        for guild in self.guilds:
-            print(guild)
-
-        print('All Emojis')
-        for emoji in self.emojis:
-            print(emoji)
-
-        print('All voice clients')
-        for voice_client in self.voice_clients:
-            print(voice_client)
-
-        print('Activity')
-        print(self.activity)
-        print('Latency')
-        print(self.latency)
 
         event_name = 'on_ready'
         message = event_name
@@ -79,19 +46,11 @@ class MyClient(Bot):
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_error(self, event, *args, **kwargs):
-        print("on_error")
-        print(event)
-        for arg in args:
-            print(arg)
-
-        for kwarg in kwargs:
-            print(kwarg, kwargs[kwarg])
-
         print('Ignoring exception in {}'.format(event), file=sys.stderr)
         traceback.print_exc()
 
         event_name = 'on_error'
-        message = 'Error: ' + str(traceback.print_exc())
+        message = 'Event: {}, Error: {}'.format(event,  str(traceback.print_exc()))
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # guild events
@@ -269,6 +228,7 @@ class MyClient(Bot):
         message = before.name + ' Member before: ' + str(before.status) + ', Member after: ' + str(after.status)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
+
     async def on_voice_state_update(self, member, before, after):
         event_name = 'on_voice_state_update'
         message = 'Member: ' + member + ', Before: ' + before + ', After: ' + after
@@ -321,16 +281,17 @@ class MyClient(Bot):
     # socket events
     async def on_socket_raw_receive(self, payload):
         event_name = 'on_socket_raw_receive'
-        message = event_name + ' fired - Payload: ' + str(payload)
+        message = 'Payload: ' + str(payload)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_socket_raw_send(self, payload):
         event_name = 'on_socket_raw_send'
-        message = event_name + ' fired - Payload: ' + str(payload)
+        message = 'Payload: ' + str(payload)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # webhook events
     async def on_webhooks_update(self, channel):
         event_name = 'on_webhooks_update'
-        message = event_name + ' fired - Channel: ' + channel.name
+        message = 'Channel: ' + channel.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
+
