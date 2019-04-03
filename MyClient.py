@@ -9,8 +9,8 @@ from discord.ext.commands import Bot
 
 class MyClient(Bot):
     # general events
-    def __init__(self, prefix, description, formatter, pm_help, log_path):
-        super().__init__(prefix, formatter, description, pm_help)
+    def __init__(self, prefix, description, pm_help, help_command, log_path):
+        super().__init__(command_prefix=prefix, description=description, pm_help=pm_help, help_command=help_command)
         self.add_command(self.test)
         self.logger = Logger(__name__, log_path)
 

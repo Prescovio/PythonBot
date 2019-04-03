@@ -2,7 +2,7 @@ import json
 import traceback
 
 from MyClient import MyClient
-from MyHelpFormatter import MyHelpFormatter
+from MyHelpCommand import MyHelpCommand
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -12,8 +12,8 @@ description = config['GENERAL']['DESCRIPTION']
 pm_help = config['GENERAL']['PM_HELP']
 log_path = config['GENERAL']['LOG_PATH']
 
-help_formatter = MyHelpFormatter()
-bot = MyClient(prefix, description, help_formatter, pm_help, log_path)
+help_command = MyHelpCommand()
+bot = MyClient(prefix, description, pm_help, help_command, log_path)
 
 try:
     bot.run('NTI3OTk3MDQ3MjgzMTIyMjI2.DwfTyA.Nmjz-2oGd4bxmTsZ3lSj3EMUhyk')
