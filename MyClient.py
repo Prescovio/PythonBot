@@ -218,6 +218,12 @@ class MyClient(Bot):
         message = 'Member: ' + member.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
+        guild = member.guild
+        if guild.system_channel is not None:
+            to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
+            await guild.system_channel.send(to_send)
+
+
     async def on_member_remove(self, member):
         event_name = 'on_member_remove'
         message = 'Member: ' + member.name
