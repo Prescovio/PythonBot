@@ -234,10 +234,13 @@ class MyClient(Bot):
         message = before.name + ' Member before: ' + str(before.status) + ', Member after: ' + str(after.status)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
-
     async def on_voice_state_update(self, member, before, after):
         event_name = 'on_voice_state_update'
-        message = 'Member: ' + member + ', Before: ' + before + ', After: ' + after
+        message = 'Member: ' + member.name
+        if before.channel:
+            message += ', Before: ' + before.channel.name
+        if after.channel:
+            message += ', After: ' + after.channel.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_member_ban(self, guild, user):
