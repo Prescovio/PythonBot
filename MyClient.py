@@ -4,7 +4,7 @@ import discord
 from Logger import Logger
 
 from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, CommandNotFound
 
 
 class MyClient(Bot):
@@ -51,6 +51,14 @@ class MyClient(Bot):
 
         event_name = 'on_error'
         message = 'Event: {}, Error: {}'.format(event,  str(traceback.print_exc()))
+        self.logger.log(message=message, file_name=event_name, directory=event_name)
+
+    async def on_command_error(self, context, exception):
+        print('Ignoring exception in {}'.format(exception), file=sys.stderr)
+        traceback.print_exc()
+
+        event_name = 'on_command_error'
+        message = 'Exception: {}, Error: {}'.format(exception, str(traceback.print_exc()))
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     # guild events
@@ -110,7 +118,7 @@ class MyClient(Bot):
     async def on_message_edit(self, before, after):
         event_name = 'on_message_edit'
         message = ('Before message: ' + before.content + ', After message: ' + after.content +
-                   ', Author: ' + before.author)
+                   ', Author: ' + before.author.name)
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_message_delete(self, message):
@@ -194,7 +202,7 @@ class MyClient(Bot):
     # private channel events
     async def on_private_channel_create(self, channel):
         event_name = 'on_private_channel_create'
-        message = 'Channel: ' + channel.name
+        message = 'User: ' + channel.recipient.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_private_channel_delete(self, channel):
