@@ -61,6 +61,8 @@ class MyClient(Bot):
         message = 'Exception: {}, Error: {}'.format(exception, str(traceback.print_exc()))
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
+        return
+
     # guild events
     async def on_guild_join(self, guild):
         event_name = 'on_guild_join'
