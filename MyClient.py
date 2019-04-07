@@ -54,9 +54,6 @@ class MyClient(Bot):
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_command_error(self, context, exception):
-        print('Ignoring exception in {}'.format(exception), file=sys.stderr)
-        traceback.print_exc()
-
         event_name = 'on_command_error'
         message = 'Exception: {}, Error: {}'.format(exception, str(traceback.print_exc()))
         self.logger.log(message=message, file_name=event_name, directory=event_name)
