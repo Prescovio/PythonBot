@@ -144,18 +144,18 @@ class MyClient(Bot):
     # reaction events
     async def on_reaction_add(self, reaction, user):
         event_name = 'on_reaction_add'
-        message = 'Reaction: ' + reaction + ', User: ' + user
+        message = 'Reaction: ' + str(reaction.emoji) + ', User: ' + user.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_reaction_remove(self, reaction, user):
         event_name = 'on_reaction_remove'
-        message = 'Reaction: ' + reaction + ', User: ' + user
+        message = 'Reaction: ' + str(reaction.emoji) + ', User: ' + user.name
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
     async def on_reaction_clear(self, message, reactions):
         event_name = 'on_reactions_clear'
-        message = ('Message: ' + message.content + ', Author: ' + message.author + ' - ' +
-                   ','.join(reactions))
+        message = ('Message: ' + message.content + ', Author: ' + message.author.name + ' - ' +
+                   ','.join(str(reaction.emoji) for reaction in reactions))
 
         self.logger.log(message=message, file_name=event_name, directory=event_name)
 
